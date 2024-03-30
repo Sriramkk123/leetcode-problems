@@ -8,7 +8,7 @@ public:
         while(right < fruits.size()){
             takenFruits[fruits[right]]++;
             if(takenFruits.size() > 2){
-                while(takenFruits.size() > 2){
+                if(takenFruits.size() > 2){
                     takenFruits[fruits[left]]--;
                     if(takenFruits[fruits[left]] == 0){
                         takenFruits.erase(fruits[left]);
