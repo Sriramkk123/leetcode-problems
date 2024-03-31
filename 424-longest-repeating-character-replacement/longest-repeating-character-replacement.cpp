@@ -13,9 +13,7 @@ public:
                 freq[s[left] - 'A']--;
                 left++;
             }
-            if((right - left + 1) - maxFreq <= k){
-                maxLen = max(maxLen, (right - left + 1));
-            }
+            maxLen = max(maxLen, (right - left + 1));
             right++;
         }
         return maxLen;
