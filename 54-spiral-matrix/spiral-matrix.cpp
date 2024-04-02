@@ -1,44 +1,33 @@
 class Solution {
 public:
     vector<int> spiralOrder(vector<vector<int>>& matrix) {
-        vector<int> res;
-        if (matrix.empty()) {
-            return res;
+        int m = matrix.size();
+        int n = matrix[0].size();
+        int top = 0, left = 0;
+        int bottom = m-1, right = n-1;
+        vector<int> result; 
+        while (top<=bottom && left<=right) {
+            for (int i=left; i<=right && top<=bottom; i++) {
+                result.push_back(matrix[top][i]);
+            }
+            top++;
+            
+            for (int i=top; i<=bottom && left<=right; i++) {
+                result.push_back(matrix[i][right]);
+            }
+            right--;
+            
+            for (int i=right; i>=left && top<=bottom; i--) {
+                result.push_back(matrix[bottom][i]);
+            }
+            bottom--;
+            
+            for (int i=bottom; i>=top && left<=right; i--) {
+                result.push_back(matrix[i][left]);
+            }
+            left++;
         }
-
-        int startRow = 0;
-        int endRow = matrix.size() - 1;
-        int startCol = 0;
-        int endCol = matrix[0].size() - 1;
-        int total = matrix.size() * matrix[0].size();
-        int count = 0;
-
-        while (count < total) {
-            for (int i = startCol; count < total && i <= endCol; i++) {
-                res.push_back(matrix[startRow][i]);
-                count++;
-            }
-            startRow++;
-
-            for (int i = startRow; count < total && i <= endRow; i++) {
-                res.push_back(matrix[i][endCol]);
-                count++;
-            }
-            endCol--;
-
-            for (int i = endCol; count < total && i >= startCol; i--) {
-                res.push_back(matrix[endRow][i]);
-                count++;
-            }
-            endRow--;
-
-            for (int i = endRow; count < total && i >= startRow; i--) {
-                res.push_back(matrix[i][startCol]);
-                count++;
-            }
-            startCol++;
-        }
-        return res;
+        return result;
     }
 };
 
