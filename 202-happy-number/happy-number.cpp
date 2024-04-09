@@ -11,11 +11,11 @@ public:
     }
     bool isHappy(int n) {
         int slow = n;
-        int fast = n;
-        do {
+        int fast = sumOfSquaresOfDigits(n);
+        while(slow != fast) {
             slow = sumOfSquaresOfDigits(slow);
             fast = sumOfSquaresOfDigits(sumOfSquaresOfDigits(fast));
-        }  while(slow != fast);
+        }
         return slow == 1;
     }
 };
