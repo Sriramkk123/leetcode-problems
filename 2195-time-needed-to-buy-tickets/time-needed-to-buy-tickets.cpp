@@ -5,15 +5,11 @@ public:
             return tickets[0];
         }
         int totalTime = 0;
-        while(tickets[k] > 0){
-            for(int i = 0;i < tickets.size();i++){
-                if(tickets[i] > 0){
-                    tickets[i]--;
-                    totalTime++;
-                    if(i == k && tickets[i] == 0){
-                        break;
-                    }
-                }
+        for(int i = 0;i < tickets.size();i++){
+            if(i <= k){
+                totalTime += min(tickets[i], tickets[k]);
+            } else {
+                totalTime += min(tickets[k] - 1, tickets[i]);
             }
         }
         return totalTime;
