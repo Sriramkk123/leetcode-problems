@@ -8,11 +8,9 @@ public:
             vector<int> previousInterval = res.back();
             vector<int> currentInterval = intervals[i];
             if(previousInterval[1] >= currentInterval[0]){
-                int start = previousInterval[0];
                 int end = max(currentInterval[1], previousInterval[1]);
-                res.pop_back();
-                res.push_back(vector<int>{start, end});
-            } else {
+                res.back()[1] = end;
+            } else {    
                 res.push_back(currentInterval);
             }
         }
