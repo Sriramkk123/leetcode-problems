@@ -11,23 +11,25 @@
  */
 class Solution {
 public:
-    TreeNode* insertAtDepth(TreeNode* root, int val, int depth){
+    TreeNode* insertAtDepth(TreeNode* root, TreeNode* prev, bool fromLeft, bool fromRight, int val, int depth){
+        if(depth == 0){
+            TreeNode* newNode = new TreeNode(val);
+            if(fromLeft){
+                prev->left = newNode;
+                newNode->left = root;
+            } else {
+                prev->right = newNode;
+                newNode->right = root;
+            }
+            return newNode;
+        }
+        
         if(root == NULL){
             return root;
         }
-        
-        if(depth == 2){
-            TreeNode* newLeftNode = new TreeNode(val);
-            TreeNode* newRightNode = new TreeNode(val);
-            newLeftNode->left = root->left;
-            newRightNode->right = root->right;
-            root->left = newLeftNode;
-            root->right = newRightNode;
-            return root;
-        }   
 
-        root->left = insertAtDepth(root->left, val, depth-1);
-        root->right = insertAtDepth(root->right, val, depth - 1);
+        root->left = insertAtDepth(root->left, root, true, false, val, depth-1);
+        root->right = insertAtDepth(root->right, root, false, true, val, depth - 1);
         return root;
     }
 
@@ -38,6 +40,6 @@ public:
             return newHead;
         }
 
-        return insertAtDepth(root, val, depth);   
+        return insertAtDepth(root, NULL, false, false, val, depth-1);   
     }
 };
