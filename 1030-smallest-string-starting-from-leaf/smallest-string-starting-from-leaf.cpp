@@ -12,30 +12,18 @@
 class Solution {
 public:
     string smallestFromLeaf(TreeNode* root) {
-        string res;
-        string curr;
-        findSmallest(root, curr, res);
-        return res;
-    }
-
-    void findSmallest(TreeNode* root, string curr, string& res){
-        if(root == NULL){
-            return;
+        queue<pair<TreeNode*, string>> q;
+        q.emplace(root, "");
+        string ans="|";
+        while(!q.empty()){
+            auto [node, s]=q.front();
+            s=char(node->val+'a') + s;
+            q.pop();
+            if (!node->left && !node->right)
+                ans=min(ans, s);
+            if(node->left) q.emplace(node->left, s);
+            if(node->right) q.emplace(node->right, s);    
         }
-        
-
-        if(root->left == NULL && root->right == NULL){
-            curr = char(root->val + 'a') + curr;
-            if(res.empty()){
-                res = curr;
-                return;
-            }
-            res = min(res,curr);
-            return;
-        }
-
-        curr = char(root->val + 'a') + curr;
-        findSmallest(root->left, curr, res);
-        findSmallest(root->right, curr, res);
+        return ans;
     }
 };
