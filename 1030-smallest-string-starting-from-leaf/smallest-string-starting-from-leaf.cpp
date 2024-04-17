@@ -14,13 +14,13 @@ public:
     string smallestFromLeaf(TreeNode* root) {
         queue<pair<TreeNode*, string>> q;
         q.emplace(root, "");
-        string ans="|";
+        string ans="";
         while(!q.empty()){
             auto [node, s]=q.front();
             s=char(node->val+'a') + s;
             q.pop();
             if (!node->left && !node->right)
-                ans=min(ans, s);
+                ans=ans.empty() ? s : min(ans, s);
             if(node->left) q.emplace(node->left, s);
             if(node->right) q.emplace(node->right, s);    
         }
