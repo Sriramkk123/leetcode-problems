@@ -23,20 +23,14 @@ public:
             prev = prev->next;
         }
 
-        stack<ListNode*> st;
         ListNode* current = prev->next;
-        for(int i = 0;i < right - left + 1;i++){
-            st.push(current);
-            current=current->next;
+        for(int i = 0;i < right - left;i++){
+            auto nextt = current->next;
+            current->next = nextt->next;
+            nextt->next = prev->next;
+            prev->next = nextt;
         }
 
-        while(!st.empty()){
-            prev->next = st.top();
-            st.pop();
-            prev = prev->next;
-        }
-
-        prev->next = current;
         return dummy->next;
     }
 };
