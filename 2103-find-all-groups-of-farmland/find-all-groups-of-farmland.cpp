@@ -1,11 +1,7 @@
 class Solution {
 public:
     void findEnd(vector<vector<int>>& land, int row, int col, vector<int>& temp){
-        if(row < 0 || col < 0 || row == land.size() || col == land[row].size() || land[row][col] == 0){
-            return;
-        }
-
-        if(land[row][col] == -1){
+        if(row < 0 || col < 0 || row == land.size() || col == land[row].size() || land[row][col] != 1){
             return;
         }
 
