@@ -22,10 +22,9 @@ public:
 
         ListNode* prev = dummy;
         ListNode* curr = dummy;
-        ListNode* nex = dummy;
         while(count >= k){
             curr = prev->next;
-            nex = curr->next;
+            ListNode* nex = curr->next;
             for(int i = 1;i < k;i++){
                 curr->next = nex->next;
                 nex->next = prev->next;
