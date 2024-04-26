@@ -1,30 +1,32 @@
 class Solution {
 public:
-    int solve(vector<vector<int>>& grid, int row, int col, vector<vector<int>>& dp){
-        if(row == grid.size() - 1){
-            return grid[row][col];
-        }
-
-        if(dp[row][col] != -1000){
-            return dp[row][col];
-        }
+    int get_min(vector<int> arr){
         int mini = INT_MAX;
-        for(int j = 0;j < grid[0].size();j++){
-            if(j != col){
-                mini = min(
-                    mini,
-                    grid[row][col] + solve(grid,row+1,j,dp)
-                );
-            }
+        for(auto ele : arr){
+            mini = min(ele, mini);
         }
-        return dp[row][col] = mini;
+        return mini;
     }
     int minFallingPathSum(vector<vector<int>>& grid) {
         int minSum = INT_MAX;
-        vector<vector<int>> dp(grid.size(), vector<int>(grid[0].size() + 1, -1000));
-        for(int i = 0;i < grid[0].size();i++){
-            minSum = min(minSum, solve(grid, 0, i, dp));
+        vector<int> prev_dp;
+        for(auto ele : grid[0]){
+            prev_dp.push_back(ele);
         }
-        return minSum;
+        for(int i = 1;i < grid.size();i++){
+            vector<int> dp(grid[0].size(), INT_MAX);
+            for(int j = 0;j < grid[0].size();j++){
+                for(int k = 0;k < prev_dp.size();k++){
+                    if(k != j){
+                        dp[j] = min(
+                            dp[j],
+                            grid[i][j] + prev_dp[k]
+                        );
+                    }
+                }
+            }
+            prev_dp = dp;
+        }
+        return get_min(prev_dp);
     }
 };
