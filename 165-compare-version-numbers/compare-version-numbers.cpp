@@ -1,32 +1,26 @@
 class Solution {
 public:
     int compareVersion(string version1, string version2) {
-        stringstream ss1(version1);
-        string v1;
-        vector<int> res1(500);
-        int index = 0;
-        while(getline(ss1, v1, '.')){
-            res1[index++] = stoi(v1);
-        }
-
-        stringstream ss2(version2);
-        string v2;
-        vector<int> res2(500);
-        index = 0;
-        while(getline(ss2, v2, '.')){
-            res2[index++] = stoi(v2);
-        }
-
-        for(int i = 0;i < res1.size();i++){
-            if(res1[i] > res2[i]){
+        int i = 0;
+        int j = 0;
+        while(i < version1.size() || j < version2.size()){
+            int num1 = 0;
+            int num2 = 0;
+            while(i < version1.size() && version1[i] != '.'){
+                num1 = num1*10 + (version1[i++] - '0');
+            }   
+            while(j < version2.size() && version2[j] != '.'){
+                num2 = num2*10 + (version2[j++] - '0');
+            } 
+            if(num1 < num2){
+                return -1;
+            }  
+            if(num1 > num2){
                 return 1;
             }
-
-            if(res1[i] < res2[i]){
-                return -1;
-            }
+            i++;
+            j++;
         }
-
         return 0;
     }
 };
