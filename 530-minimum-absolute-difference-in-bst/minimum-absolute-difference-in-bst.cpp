@@ -11,23 +11,22 @@
  */
 class Solution {
 public:
-    TreeNode* prev;
     int getMinimumDifference(TreeNode* root) {
         int diff = INT_MAX;
         TreeNode* prev = NULL;
-        inorder(root, diff);
+        inorder(root, prev, diff);
         return diff;
     }
-    void inorder(TreeNode* root, int& diff){
+    void inorder(TreeNode* root, TreeNode*& prev, int& diff){
         if(!root){
             return;
         }
 
-        inorder(root->left, diff);
+        inorder(root->left, prev, diff);
         if(prev){
             diff = min(diff, root->val - prev->val);
         }
         prev = root;
-        inorder(root->right, diff);
+        inorder(root->right, prev, diff);
     }
 };
