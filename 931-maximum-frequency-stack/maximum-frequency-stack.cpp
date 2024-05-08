@@ -2,7 +2,7 @@ class FreqStack {
 public:
     int maxFreq;
     unordered_map<int,int> freq;
-    unordered_map<int,vector<int>> maxFreqMap;
+    unordered_map<int,stack<int>> maxFreqMap;
     FreqStack() {
         maxFreq = 0;
     }
@@ -10,12 +10,12 @@ public:
     void push(int val) {    
         freq[val] += 1;
         maxFreq = max(maxFreq, freq[val]);
-        maxFreqMap[freq[val]].push_back(val);
+        maxFreqMap[freq[val]].push(val);
     }
     
     int pop() {
-        int result = maxFreqMap[maxFreq].back();
-        maxFreqMap[maxFreq].pop_back();
+        int result = maxFreqMap[maxFreq].top();
+        maxFreqMap[maxFreq].pop();
         freq[result]--;
         if(maxFreqMap[maxFreq].size() == 0){
             maxFreq -= 1;
