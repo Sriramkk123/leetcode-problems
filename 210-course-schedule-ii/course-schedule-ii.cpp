@@ -15,10 +15,11 @@ public:
             }
         }
 
-        vector<int> res;
+        vector<int> res(numCourses);
+        int index = numCourses - 1;
         while(!q.empty()){
             auto curr = q.front();
-            res.push_back(curr);
+            res[index--] = (curr);
             q.pop();
 
             for(auto nei : graph[curr]){
@@ -29,7 +30,6 @@ public:
                 }
             }
         }
-        reverse(res.begin(), res.end());
-        return res.size() == numCourses ? res : vector<int>{};
+        return index == -1 ? res : vector<int>{};
     }
 };
