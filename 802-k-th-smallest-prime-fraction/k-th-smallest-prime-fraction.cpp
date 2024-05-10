@@ -7,16 +7,22 @@ public:
 
         priority_queue<pair<double, pair<int, int>>, vector<pair<double, pair<int, int>>>, greater<>> minHeap;
         for(int i = 0;i < arr.size();i++){
-            for(int j = i + 1;j < arr.size();j++){
-                minHeap.push({(double)arr[i]/arr[j], {arr[i], arr[j]}});
+            minHeap.push({(double)arr[i]/arr.back(), {i, arr.size() - 1}});
+        }
+
+        while(--k > 0){
+            auto curr = minHeap.top();
+            minHeap.pop();
+            
+            int num = curr.second.first;
+            int den = curr.second.second;
+            den--;
+            if(den > num){
+                minHeap.push({(double)arr[num]/arr[den], {num, den}});
             }
         }
 
-        pair<int, int> res;
-        for(int i = 0;i < k;i++){
-            res = minHeap.top().second;
-            minHeap.pop();
-        }
-        return {res.first, res.second};
+        pair<int, int> res = minHeap.top().second;
+        return vector<int>{arr[res.first], arr[res.second]};
     }
 };
