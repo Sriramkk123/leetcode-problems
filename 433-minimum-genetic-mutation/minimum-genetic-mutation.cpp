@@ -1,35 +1,37 @@
 class Solution {
 public:
-    int delta(string one, string two){
-        int count = 0;
-        for(int i = 0;i < one.size();i++){
-            if(one[i] != two[i]){
-                count++;
-            }
-        }
-        return count;
-    }
     int minMutation(string startGene, string endGene, vector<string>& bank) {
-        queue<string> q;
-        q.push(startGene);
+        unordered_set<string> bankSet(bank.begin(), bank.end());
+        if(bankSet.count(endGene) < 1){
+            return -1;
+        }
 
-        unordered_map<string, int> dist;
-        dist[startGene] = 0;
-
+        queue<pair<string,int>> q;
+        unordered_set<string> visited;
+        q.push({startGene, 0});
+        visited.insert(startGene);
+        string possibles = "ACGT";
         while(!q.empty()){
-            string curr = q.front();
+            auto curr = q.front();
             q.pop();
 
-            for(string candidate : bank){
-                if(dist.find(candidate) == dist.end() && delta(candidate, curr) <= 1){
-                    dist[candidate] = dist[curr] + 1;
-                    q.push(candidate);
+            string word = curr.first;
+            int moves = curr.second;
+            for(int i = 0;i < word.size();i++){
+                char og = word[i];
+                for(int j = 0;j < possibles.size();j++){
+                    word[i] = possibles[j];
+                    if(bankSet.count(word) >= 1){
+                        if(word == endGene){
+                            return moves + 1;
+                        }
+                        if(visited.count(word) < 1){
+                            visited.insert(word);
+                            q.push({ word, moves + 1});
+                        }
+                    }
                 }
-            }
-        }
-        for(auto current : dist){
-            if(current.first == endGene){
-                return current.second;
+                word[i] = og;
             }
         }
         return -1;
