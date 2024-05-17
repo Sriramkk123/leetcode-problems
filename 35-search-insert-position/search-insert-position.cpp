@@ -18,7 +18,7 @@ public:
                 first = mid + 1;
             }
         }
-        return first;
+        return ans;
     }
 };
 
