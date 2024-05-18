@@ -16,19 +16,16 @@ public:
         helper(root, moves);
         return moves;
     }
-    pair<int,int> helper(TreeNode* root, int& moves){
+    int helper(TreeNode* root, int& moves){
         if(!root){
-            return {0,0};
+            return 0;
         }
 
         auto left = helper(root->left, moves);
         auto right = helper(root->right, moves);
 
-        int total_size = left.first + right.first + 1;
-        int coins = root->val + left.second + right.second;
-
-        moves += abs(total_size - coins);
-
-        return {total_size, coins};
+        int extra_coins = root->val - 1 + left + right;
+        moves += abs(extra_coins);
+        return extra_coins;
     }
 };
