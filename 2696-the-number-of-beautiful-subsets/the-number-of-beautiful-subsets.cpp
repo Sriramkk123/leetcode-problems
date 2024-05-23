@@ -35,7 +35,6 @@ private:
     }
 public:
     int beautifulSubsets(vector<int>& nums, int k) {
-        sort(nums.begin(), nums.end());
         int count = 0;
         vector<int> current;
         helper(0, current, nums, k, count);
