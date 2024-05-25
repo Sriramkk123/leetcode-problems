@@ -1,45 +1,46 @@
 class Solution {
-public:
-    pair<int, int> getCoordinate(int n, int number){
-        int row = (number - 1)/n;
-        int col = (number - 1)%n;
-        if(row%2 != 0){
+private:
+    pair<int,int> getCoordinate(int position, int n){
+        int row = (position-1)/n;
+        int col = (position-1)%n;
+        if(row % 2 != 0){
             col = n - 1 - col;
         }
-        return pair<int, int>{row, col};
+        row = n - 1 - row;
+        return {row, col};
     }
+public:
     int snakesAndLadders(vector<vector<int>>& board) {
         int n = board.size();
-        vector<vector<int>> myBoard = board;
-        for (int i = 0; i < n; i++) {
-            for(int j = 0;j < n;j++){
-                myBoard[i][j] = board[n-i-1][j];
-            }
-        }
-        vector<int> visited(n*n, false);
-        queue<pair<int,int>> q;
-        q.push({1, 0});
-
+        int m = board[0].size();
+        queue<pair<int, int>> q;
+        q.push({0, 1});
+        vector<bool> visited(n*m+1, false);
+        visited[0] = true;
         while(!q.empty()){
             auto curr = q.front();
             q.pop();
-            int pos = curr.first;
-            int moves = curr.second;
 
-            for(int i = 1;i <= 6;i++){
-                int nextPos = pos + i;
-                auto coordinate = getCoordinate(n, nextPos);
-                int row = coordinate.first;
-                int col = coordinate.second;
-                if(myBoard[row][col] != -1){
-                    nextPos = myBoard[row][col];
+
+            int steps = curr.first;
+            int pos = curr.second;
+            for(int next = pos + 1; next <= min(pos + 6, n*n);next++){
+                auto coordinate = getCoordinate(next, n);
+                int x = coordinate.first;
+                int y = coordinate.second;
+
+                int newPos = next;
+                if(board[x][y] != -1){
+                    newPos = board[x][y];
                 }
-                if(nextPos == n*n){
-                    return moves + 1;
+
+                if(newPos == n*n){
+                    return steps + 1;
                 }
-                if(!visited[nextPos]){
-                    visited[nextPos] = true;
-                    q.push({nextPos, moves + 1});
+
+                if(!visited[newPos]){
+                    visited[newPos] = true;
+                    q.push({steps + 1, newPos});
                 }
             }
         }
