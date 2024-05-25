@@ -1,46 +1,53 @@
 class Solution {
-public:
-    double bfs(string src, string target, unordered_map<string, vector<pair<string, double>>>& adj){
-        if(adj.find(src) == adj.end() || adj.find(target) == adj.end()){
+private:
+    double bfs(string src, string dest, unordered_map<string, vector<pair<string, double>>>& adj){
+        if(adj.find(src) == adj.end() || adj.find(dest) == adj.end()){
             return -1;
         }
+
         unordered_map<string, bool> visited;
         queue<pair<string, double>> q;
         q.push({src, 1});
         visited[src] = true;
-        while(!q.empty()){  
+        while(!q.empty()){
             auto curr = q.front();
             q.pop();
-            double w = curr.second;
-            string tar = curr.first;
-            if(tar == target){
-                return w;
+
+
+            string node = curr.first;
+            double weight = curr.second;
+
+            if(node == dest){
+                return weight;
             }
 
-            for(auto neighbours : adj[tar]){
-                double weight = neighbours.second;
-                string node = neighbours.first;
-                if(!visited[node]){
-                    q.push({node, w*weight});
-                    visited[node] = true;
+            for(auto nei : adj[node]){
+                if(visited.count(nei.first) == 0){
+                    q.push({nei.first, nei.second * weight});
+                    visited[nei.first] = true;
                 }
             }
         }
         return -1;
     }
+public:
     vector<double> calcEquation(vector<vector<string>>& equations, vector<double>& values, vector<vector<string>>& queries) {
         vector<double> res;
         unordered_map<string, vector<pair<string, double>>> adj;
         for(int i = 0;i < equations.size();i++){
-            auto eq = equations[i];
-            adj[eq[0]].push_back({eq[1], values[i]});
-            adj[eq[1]].push_back({eq[0], 1 / values[i]});
+            auto current = equations[i];
+            string u = current[0];
+            string v = current[1];
+            double value = values[i];
+            adj[u].push_back({v, value});
+            adj[v].push_back({u, 1/value});
         }
-        for(int i = 0;i < queries.size();i++){
-            auto query = queries[i];
-            string source = query[0];
-            string target = query[1];
-            res.push_back(bfs(source, target, adj));
+
+
+        for(auto q : queries){
+            string src = q[0];
+            string dest = q[1];
+            res.push_back(bfs(src, dest, adj));
         }
         return res;
     }
