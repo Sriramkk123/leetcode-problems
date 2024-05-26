@@ -11,24 +11,16 @@
  */
 class Solution {
 private:
-    int longestUnivaluePathHelper(TreeNode* root, int& longestPath){
+    int longestUnivaluePathHelper(TreeNode* root, int parentVal, int& longestPath){
         if(!root){
             return 0;
         }
 
-        auto left = longestUnivaluePathHelper(root->left, longestPath);
-        auto right = longestUnivaluePathHelper(root->right, longestPath);
-
-        if(!root->left || root->left->val != root->val){
-            left = 0;
-        }
-
-        if(!root->right || root->right->val != root->val){
-            right = 0;
-        }
-
+        int val = root->val;
+        auto left = longestUnivaluePathHelper(root->left, val, longestPath);
+        auto right = longestUnivaluePathHelper(root->right, val, longestPath);
         longestPath = max(longestPath, left + right);
-        return 1 + max(left, right);
+        return parentVal == val ? 1 + max(left, right) : 0;
     }   
 public:
     int longestUnivaluePath(TreeNode* root) {
@@ -36,7 +28,7 @@ public:
             return 0;
         }
         int longesPath = 0;
-        longestUnivaluePathHelper(root, longesPath);
+        longestUnivaluePathHelper(root, -1, longesPath);
         return longesPath;
     }
 };
