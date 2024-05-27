@@ -1,17 +1,15 @@
 class Solution {
 private:
-    int findCountGreaterThanEqualTo(int x, map<int, int>& mpp){
+    int findCountGreaterThanEqualTo(int x, vector<int>& mpp){
         int count = 0;
-        for(auto ele : mpp){
-            if(ele.first >= x){
-                count += ele.second;
-            }
+        for(int i = x;i < mpp.size();i++){
+            count += mpp[i];
         }
         return count;
     }
 public:
     int specialArray(vector<int>& nums) {
-        map<int, int> mpp;
+        vector<int> mpp(1001, 0);
         int maxElement = INT_MIN;
         for(int i = 0;i < nums.size();i++){
             mpp[nums[i]]++;
