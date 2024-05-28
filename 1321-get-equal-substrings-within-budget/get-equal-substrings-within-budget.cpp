@@ -9,10 +9,8 @@ public:
             cost += abs((s[right] - 'a') - (t[right] - 'a'));
 
             if(cost > maxCost){
-                while(cost > maxCost){
-                    cost -= abs((s[left] - 'a') - (t[left] - 'a'));
-                    left++;
-                }
+                cost -= abs((s[left] - 'a') - (t[left] - 'a'));
+                left++;
             }
 
             length = max(length, right - left + 1);
