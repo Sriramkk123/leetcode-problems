@@ -2,21 +2,22 @@ class Solution {
 public:
     int equalSubstring(string s, string t, int maxCost) {
         int length = INT_MIN;
-        for(int i = 0;i < s.size();i++){
-            int currentCost = 0;
-            int maxLength = 0;
-            for(int j = i;j < s.size();j++){
-                int cst = abs((s[j] - 'a') - (t[j] - 'a'));
-                if(currentCost + cst <= maxCost){
-                    currentCost += cst; 
-                    maxLength++;
-                } else {
-                    break;
+        int left = 0;
+        int right = 0;
+        int cost = 0;
+        while(right < s.size()){
+            cost += abs((s[right] - 'a') - (t[right] - 'a'));
+
+            if(cost > maxCost){
+                while(cost > maxCost){
+                    cost -= abs((s[left] - 'a') - (t[left] - 'a'));
+                    left++;
                 }
             }
-            length = max(length, maxLength);
+
+            length = max(length, right - left + 1);
+            right++;
         }
         return length;
     }
 };
-// 6 + 12
