@@ -10,51 +10,40 @@
  */
 class Solution {
 private:
-    ListNode* merge(ListNode* first, ListNode* second){
-        ListNode* dummy = new ListNode(0);
-        ListNode* temp = dummy;
-        while(first && second){
-            if(first->val <= second->val){
-                temp->next = first;
-                first = first->next;
-            } else {
-                temp->next = second;
-                second = second->next;
-            }
-            temp = temp->next;
+    struct compare {
+        bool operator()(ListNode* a, ListNode* b){
+            return a->val > b->val;
         }
-
-        while(first){
-            temp->next = first;
-            first = first->next;
-            temp = temp->next;
-        }
-
-        while(second){
-            temp->next = second;
-            second = second->next;
-            temp = temp->next;
-        }
-        return dummy->next;
-    }
-    ListNode* mergeHelper(int start, int end, vector<ListNode*>& lists){
-        if(start > end){
-            return NULL;
-        }
-        if(start == end){
-            return lists[start];
-        }        
-
-        int mid = (start + end) / 2;
-        ListNode* left = mergeHelper(start, mid, lists);
-        ListNode* right = mergeHelper(mid+1, end, lists);
-        return merge(left, right);
-    }
+    };
 public:
     ListNode* mergeKLists(vector<ListNode*>& lists) {
         if(lists.size() == 0){
             return NULL;
         }
-        return mergeHelper(0, lists.size() - 1, lists);
+        priority_queue<ListNode*, vector<ListNode*>, compare> pq;
+
+        for(auto list : lists){
+            if(list){
+                pq.push(list);
+            }
+        }
+
+        if(pq.empty()){
+            return NULL;
+        }
+
+        ListNode* dummy = new ListNode(0);
+        auto temp = dummy;
+        while(!pq.empty()){
+            auto curr = pq.top();
+            pq.pop();
+
+            temp->next = curr;
+            temp = temp->next;
+            if(curr->next){
+                pq.push(curr->next);
+            }
+        }
+        return dummy->next;
     }
 };
