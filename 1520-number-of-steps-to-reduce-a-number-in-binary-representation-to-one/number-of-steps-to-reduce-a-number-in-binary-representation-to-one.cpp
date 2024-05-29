@@ -1,30 +1,18 @@
 class Solution {
 private:
-    string addOne(string s){
-        int i = s.size() - 1;
-        while(i >= 0 && s[i] == '1'){
-            s[i] = '0';
-            i--;
-        }
-        if(i >= 0){
-            s[i] = '1';
-        } else {
-            s = '1' + s;
-        }
-        return s;
-    }
 public:
     int numSteps(string s) {
         int steps = 0;
-        while(s != "1"){
-            int n = s.size() - 1;
-            if(s[n] == '0'){
-                s = s.substr(0, n);
+        int carry = 0;
+        for(int i = s.size() - 1;i > 0;i--){
+            int digit = (s[i] - '0' + carry)%2;
+            if(digit == 0){
+                steps++;
             } else {
-                s = addOne(s);
+                carry = 1;
+                steps += 2;
             }
-            steps++;
         }
-        return steps;
+        return steps + carry;
     }
 };
