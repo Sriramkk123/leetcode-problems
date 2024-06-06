@@ -6,11 +6,8 @@ public:
         }
         int ans = 0;
         for(int i = 0;i < 32;i++){
-            ans = ans << 1;
-            if((n&1)){
-                ans++;
-            }
-            n = n >> 1;
+            int bit = (n >> i)&1;
+            ans = ans | (bit << (31 - i));
         }
         return ans;
     }
