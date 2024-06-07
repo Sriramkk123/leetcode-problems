@@ -1,14 +1,12 @@
 class Solution {
 public:
     int rangeBitwiseAnd(int left, int right) {
-        while(right > left){
-            right = right&(right-1);
+        int count = 0;
+        while(right != left){
+            left >>= 1;
+            right >>= 1;
+            count++;  
         }
-        return right;
+        return right << count;
     }
 };
-
-// 7
-// 111 & 110
-// 110 & 101
-// 101
