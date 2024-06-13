@@ -10,3 +10,6 @@ public:
         return right << count;
     }
 };
+// 101
+// 110
+// 111
