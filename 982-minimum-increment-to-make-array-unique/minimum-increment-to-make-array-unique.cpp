@@ -1,15 +1,17 @@
 class Solution {
 public:
     int minIncrementForUnique(vector<int>& nums) {
-        sort(nums.begin(), nums.end());
         int moves = 0;
-        for(int i = 1;i < nums.size();i++){
-            if(nums[i-1] == nums[i]){
-                moves++;
-                nums[i] = nums[i-1] + 1;
-            } else if(nums[i-1] > nums[i]) {
-                moves += (nums[i-1] - nums[i] + 1);
-                nums[i] = nums[i-1] + 1;
+        int maxi = *max_element(nums.begin(), nums.end());
+        vector<int> buckets(nums.size() + maxi, 0);
+        for(int i = 0; i < nums.size();i++){
+            buckets[nums[i]]++;
+        }
+        for(int i = 0;i < buckets.size() - 1;i++){
+            if(buckets[i] > 1){
+                int extra = buckets[i] - 1;
+                buckets[i + 1] += extra;
+                moves += extra;
             }
         }
         return moves;
