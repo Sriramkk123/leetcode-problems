@@ -3,23 +3,24 @@ public:
     bool checkValidString(string s) {
         int openMin = 0;
         int openMax = 0;
-        for(auto item : s){
-            if(item == '('){
+        for(char ch : s){
+            if(ch == '('){
                 openMin++;
                 openMax++;
-            } else if(item == '*'){
-                openMin--;
-                openMax++;
-            } else if(item == ')'){
+            } else if(ch == ')'){
                 openMin--;
                 openMax--;
-                if(openMax < 0){
-                    return false;
-                }
+            } else if(ch == '*'){
+                openMin--;
+                openMax++;
             }
 
             if(openMin < 0){
                 openMin = 0;
+            }
+
+            if(openMax < 0){
+                return false;
             }
         }
         return openMin == 0;
