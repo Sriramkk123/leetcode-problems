@@ -1,18 +1,11 @@
 class Solution {
 public:
     bool judgeSquareSum(int c) {
-        long long left = 0;
-        long long right = sqrt(c);
-        while(left <= right){
-            long long target = left*left + right*right;
-            if(target == c){
+        unordered_set<long long> cont;
+        for(long a = 0;a * a <= c;a++){
+            cont.insert((long)a*a);
+            if(cont.find((long)(c - a*a)) != cont.end()){
                 return true;
-            }
-
-            if(target > c){
-                right--;
-            } else{
-                left++;
             }
         }
         return false;
