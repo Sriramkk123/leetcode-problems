@@ -6,30 +6,22 @@ public:
         for(int i = 0;i < difficulty.size();i++){
             proDiff.push_back({profit[i], difficulty[i]});
         }
-        priority_queue<pair<int,int>> pq;
-        for(auto ele : proDiff){
-            pq.push({ele.first, ele.second});
-        }
+        sort(proDiff.begin(), proDiff.end());
         int i = worker.size() - 1;
+        int j = proDiff.size() - 1;
         int profitt = 0;
-        while(i >= 0 && !pq.empty()){
-            auto curr = pq.top();
-            pq.pop();
-
-            if(curr.second > worker[i]){
+        while(i >= 0 && j >= 0){
+            if(proDiff[j].second > worker[i]){
+                j--;
                 continue;
             } else {
-                while(i >= 0 && worker[i] >= curr.second){
-                    profitt += curr.first;
+                while(i >= 0 && worker[i] >= proDiff[j].second){
+                    profitt += proDiff[j].first;
                     i--;
                 }
+                j--;
             }
         }
         return profitt;
     }
-    // 96, 58
-    // 90, 37
-    // 4, 13
-
-    // 34, 73, 45
 };
