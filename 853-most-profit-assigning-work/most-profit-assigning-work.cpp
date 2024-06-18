@@ -1,27 +1,22 @@
 class Solution {
 public:
     int maxProfitAssignment(vector<int>& difficulty, vector<int>& profit, vector<int>& worker) {
-        sort(worker.begin(), worker.end());
-        vector<pair<int,int>> proDiff;
+        int maxProfit = 0;
+        int maxDifficulty = *max_element(difficulty.begin(), difficulty.end());
+        vector<int> difficultyInd(maxDifficulty + 1, 0);
         for(int i = 0;i < difficulty.size();i++){
-            proDiff.push_back({profit[i], difficulty[i]});
+            difficultyInd[difficulty[i]] = max(difficultyInd[difficulty[i]], profit[i]);
         }
-        sort(proDiff.begin(), proDiff.end());
-        int i = worker.size() - 1;
-        int j = proDiff.size() - 1;
-        int profitt = 0;
-        while(i >= 0 && j >= 0){
-            if(proDiff[j].second > worker[i]){
-                j--;
-                continue;
+        for(int i = 1;i <= maxDifficulty;i++){
+            difficultyInd[i] = max(difficultyInd[i-1], difficultyInd[i]);
+        }
+        for(int i = 0;i < worker.size();i++){
+            if(worker[i] >= maxDifficulty){
+                maxProfit += difficultyInd[maxDifficulty];
             } else {
-                while(i >= 0 && worker[i] >= proDiff[j].second){
-                    profitt += proDiff[j].first;
-                    i--;
-                }
-                j--;
+                maxProfit += difficultyInd[worker[i]];
             }
         }
-        return profitt;
+        return maxProfit;
     }
 };
