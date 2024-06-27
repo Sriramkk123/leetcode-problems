@@ -1,14 +1,17 @@
 class Solution {
 public:
     int findCenter(vector<vector<int>>& edges) {
-        unordered_map<int, vector<int>> mp;
+        vector<int> array(1e5+1, 0);
+        int maxValue = INT_MIN;
         for(auto edge : edges){
-            mp[edge[0]].push_back(edge[1]);
-            mp[edge[1]].push_back(edge[0]);
+            array[edge[0]]++;
+            array[edge[1]]++;
+            maxValue = max(maxValue, edge[0]);
+            maxValue = max(maxValue, edge[1]);
         }
-        for(auto edge : mp){
-            if(edge.second.size() == edges.size()){
-                return edge.first;
+        for(int i = 0;i <= maxValue;i++){
+            if(array[i] == edges.size()){
+                return i;
             }
         }
         return -1;
