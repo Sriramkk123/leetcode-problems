@@ -1,28 +1,17 @@
 class Solution {
 public:
     long long maximumImportance(int n, vector<vector<int>>& roads) {
-        unordered_map<int, set<int>> adj;
+        vector<int> degree(n, 0);
         for(auto road : roads){
-            adj[road[0]].insert(road[1]);
-            adj[road[1]].insert(road[0]);
+            degree[road[1]]++;
+            degree[road[0]]++;
         }
-        priority_queue<pair<int,int>> pq;
-        for(auto cand : adj){
-            int edge = cand.first;
-            int connectionSize = cand.second.size();
-            pq.push({connectionSize, edge}); 
-        }
-        int imp = n;
-        vector<int> importance(n, 0);
-        while(!pq.empty()){
-            auto curr = pq.top();
-            pq.pop();
-            importance[curr.second] = imp;
-            imp--;
-        }
+        sort(degree.begin(), degree.end());
+        int imp = 1;
         long long res = 0;
-        for(auto road : roads){
-            res = res + importance[road[0]] + importance[road[1]];
+        for(int i = 0;i < degree.size();i++){
+            res = res + (long long)imp*degree[i];
+            imp++; 
         }
         return res;
     }
