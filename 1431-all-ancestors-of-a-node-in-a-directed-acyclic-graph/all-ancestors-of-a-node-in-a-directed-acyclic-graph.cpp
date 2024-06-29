@@ -1,11 +1,11 @@
 class Solution {
 private:
-    void dfs(int node, vector<int> &vis, vector<int> adj[], vector<int>& curr){
+    void dfs(int node, int anc, vector<int> &vis, vector<int> adj[],vector<vector<int>>& res){
         vis[node] = true;
         for(auto nei : adj[node]){
             if(!vis[nei]){
-                curr.push_back(nei);
-                dfs(nei, vis, adj, curr);
+                res[anc].push_back(nei);
+                dfs(nei, anc, vis, adj, res);
             }
         }
     }
@@ -16,13 +16,13 @@ public:
             adj[edge[1]].push_back(edge[0]);
         }
 
-        vector<vector<int>> res;
+        vector<vector<int>> res(n);
         for(int i = 0;i < n;i++){
             vector<int> vis(n);
-            vector<int> curr;
-            dfs(i, vis, adj, curr);
-            sort(curr.begin(), curr.end());
-            res.push_back(curr);
+            dfs(i, i, vis, adj, res);
+            if(!res.empty()){
+                sort(res[i].begin(), res[i].end());
+            }
         }
         return res;
     }
