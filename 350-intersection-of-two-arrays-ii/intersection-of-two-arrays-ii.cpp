@@ -3,7 +3,7 @@ public:
     vector<int> intersect(vector<int>& nums1, vector<int>& nums2) {
         vector<int> arrayToProcess;
         vector<int> secondary;
-        if(nums1.size() >= nums2.size()){
+        if(nums1.size() <= nums2.size()){
             arrayToProcess = nums1;
             secondary = nums2;
         } else {
