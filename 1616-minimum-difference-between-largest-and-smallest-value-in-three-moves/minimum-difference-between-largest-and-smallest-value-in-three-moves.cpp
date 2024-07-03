@@ -18,20 +18,20 @@ public:
                 minH.pop();
             }
         }
-        int left = 3;
-        int right = 4;
-        vector<int> newNums(8);
+        int mini = INT_MAX;
+        vector<int> minFour;
+        vector<int> maxFour;
         while(!maxH.empty()){
-            newNums[left--] = maxH.top();
+            minFour.push_back(maxH.top());
+            maxFour.push_back(minH.top());
             maxH.pop();
-            newNums[right++] = minH.top();
             minH.pop();
         }
-        return min({
-            newNums[newNums.size() - 1] - newNums[3],
-            newNums[newNums.size() - 2] - newNums[2],
-            newNums[newNums.size() - 3] - newNums[1],
-            newNums[newNums.size() - 4] - newNums[0]
-        });
+        sort(maxFour.begin(), maxFour.end());
+        sort(minFour.begin(), minFour.end());
+        for(int i = 0;i < 4;i++){
+            mini = min(mini, maxFour[i] - minFour[i]);
+        }
+        return mini;
     }
 };
