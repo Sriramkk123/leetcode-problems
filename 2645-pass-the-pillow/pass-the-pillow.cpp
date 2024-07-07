@@ -1,15 +1,14 @@
 class Solution {
 public:
     int passThePillow(int n, int time) {
-        if(time < n){
-            return time + 1;
-        }
+        int fullRounds = time / (n - 1);
 
-        n = n - 1;
-        if((time/n) & 1){
-            return (n + 1 - (time%n));
-        }
+        int extraTime = time % (n - 1);
 
-        return (time%n) + 1;
+        if (fullRounds % 2 == 0) {
+            return extraTime + 1;  
+        } else {
+            return n - extraTime; 
+        }
     }
 };
