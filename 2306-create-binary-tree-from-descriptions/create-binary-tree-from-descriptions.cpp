@@ -13,7 +13,7 @@ class Solution {
 public:
     TreeNode* createBinaryTree(vector<vector<int>>& descriptions) {
         unordered_map<int, TreeNode*> mp;
-        unordered_map<int, vector<int>> childToParent;
+        unordered_set<int> children;
         for(auto entry : descriptions){
             int value = entry[0];
             int child = entry[1];
@@ -39,11 +39,11 @@ public:
             }
             mp[value] = node;
             mp[child] = childNode;
-            childToParent[child].push_back(value);
+            children.insert(child);
         }
 
         for(auto description : descriptions){
-            if(childToParent.find(description[0]) == childToParent.end()){
+            if(children.find(description[0]) == children.end()){
                 return mp[description[0]];
             }
         }
