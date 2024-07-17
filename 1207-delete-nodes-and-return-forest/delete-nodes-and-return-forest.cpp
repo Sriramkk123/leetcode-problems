@@ -11,48 +11,46 @@
  * };
  */
 class Solution {
-private:
-    void deleteNodesHelper(TreeNode* root, unordered_set<int>& deletableSet,
-                           vector<TreeNode*>& res) {
-        if (!root) {
-            return;
-        }
-
-        if (root->left) {
-            if (deletableSet.find(root->left->val) != deletableSet.end()) {
-                deleteNodesHelper(root->left, deletableSet, res);
-                root->left = NULL;
-            } else {
-                deleteNodesHelper(root->left, deletableSet, res);
-            }
-        }
-
-        if (root->right) {
-            if (deletableSet.find(root->right->val) != deletableSet.end()) {
-                deleteNodesHelper(root->right, deletableSet, res);
-                root->right = NULL;
-            } else {
-                deleteNodesHelper(root->right, deletableSet, res);
-            }
-        }
-
-        if (deletableSet.find(root->val) != deletableSet.end()) {
-            if (root->left) {
-                res.push_back(root->left);
-            }
-
-            if (root->right) {
-                res.push_back(root->right);
-            }
-            return;
-        }
-    }
-
 public:
     vector<TreeNode*> delNodes(TreeNode* root, vector<int>& to_delete) {
+        if(!root){
+            return {};
+        }
         vector<TreeNode*> res;
         unordered_set<int> deletableSet(to_delete.begin(), to_delete.end());
-        deleteNodesHelper(root, deletableSet, res);
+        
+        queue<TreeNode*> q;
+        q.push(root);
+
+        while(!q.empty()){
+            auto curr = q.front();
+            q.pop();
+
+            if(curr->left){
+                q.push(curr->left);
+                if(deletableSet.find(curr->left->val) != deletableSet.end()){
+                    curr->left = NULL;
+                }
+            }
+
+            if(curr->right){
+                q.push(curr->right);
+                if(deletableSet.find(curr->right->val) != deletableSet.end()){
+                    curr->right = NULL;
+                }
+            }
+
+            if(deletableSet.find(curr->val) != deletableSet.end()){
+                if(curr->left){
+                    res.push_back(curr->left);
+                }
+
+                if(curr->right){
+                    res.push_back(curr->right);
+                }
+            }
+        }
+
         if (deletableSet.find(root->val) == deletableSet.end()) {
             res.push_back(root);
         }
