@@ -11,32 +11,41 @@
  */
 class Solution {
 private:
-    vector<int> countPairsHelper(TreeNode* root, int distance, int& pairs){
+    unordered_map<int, int> countPairsHelper(TreeNode* root, int distance, int& pairs){
         if(!root){
-            return vector<int>{};
+            return unordered_map<int, int>{};
         }
         
         if(!root->left && !root->right){
-            return vector<int>{1};
+            unordered_map<int, int> count;
+            count[1] = 1;
+            return count;
         }
 
-        vector<int> left = countPairsHelper(root->left, distance, pairs);
-        vector<int> right = countPairsHelper(root->right, distance, pairs);
+        unordered_map<int, int> left = countPairsHelper(root->left, distance, pairs);
+        unordered_map<int, int> right = countPairsHelper(root->right, distance, pairs);
 
-        for(int el1 : left){
-            for(int el2 : right){
-                if(el1 + el2 <= distance){
-                    pairs++;
+        for(auto el1 : left){
+            for(auto el2 : right){
+                if(el1.first + el2.first <= distance){
+                    pairs += left[el1.first] * right[el2.first];
                 }
             }
         }
 
-        left.insert(left.end(), right.begin(), right.end());
-        for(int i = 0;i < left.size();i++){
-            left[i]++;
+        unordered_map<int,int> res;
+        for(auto ele : left){
+            if(ele.first + 1 <= distance){
+                res[ele.first + 1] = left[ele.first];
+            }
         }
 
-        return left;
+        for(auto ele : right){
+            if(ele.first + 1 <= distance){
+                res[ele.first + 1] += right[ele.first];
+            }
+        }
+        return res;
     }
 public:
     int countPairs(TreeNode* root, int distance) {
