@@ -11,46 +11,62 @@
  */
 class Solution {
 private:
-    unordered_map<int, int> countPairsHelper(TreeNode* root, int distance, int& pairs){
+    void buildGraph(TreeNode* root, unordered_map<TreeNode*, vector<TreeNode*>>& adj, unordered_set<TreeNode*>& leafs){
         if(!root){
-            return unordered_map<int, int>{};
+            return;
         }
-        
+
+        if(root->left){
+            adj[root].push_back(root->left);
+            adj[root->left].push_back(root);
+            buildGraph(root->left, adj, leafs);
+        }
+
+        if(root->right){
+            adj[root].push_back(root->right);
+            adj[root->right].push_back(root);
+            buildGraph(root->right, adj, leafs);
+        }
+
         if(!root->left && !root->right){
-            unordered_map<int, int> count;
-            count[1] = 1;
-            return count;
+            leafs.insert(root);
         }
+    }
+    void bfs(TreeNode* root, unordered_map<TreeNode*, vector<TreeNode*>>& adj, unordered_set<TreeNode*>& leafs, int& res, int distance){
+        queue<pair<TreeNode*, int>> q;
+        q.push({root, 0});
+        unordered_set<TreeNode*> visited;
+        visited.insert(root);
+        while(!q.empty()){
+            auto curr = q.front();
+            q.pop();
 
-        unordered_map<int, int> left = countPairsHelper(root->left, distance, pairs);
-        unordered_map<int, int> right = countPairsHelper(root->right, distance, pairs);
+            TreeNode* node = curr.first;
+            int dist = curr.second;
+            if(dist > distance){
+                break;
+            }
+            if(root != node && dist <= distance && leafs.find(node) != leafs.end()){
+                res++;
+            }
 
-        for(auto el1 : left){
-            for(auto el2 : right){
-                if(el1.first + el2.first <= distance){
-                    pairs += left[el1.first] * right[el2.first];
+            for(auto nei : adj[node]){
+                if(visited.find(nei) == visited.end()){
+                    q.push({nei, dist + 1});
+                    visited.insert(nei);
                 }
             }
         }
-
-        unordered_map<int,int> res;
-        for(auto ele : left){
-            if(ele.first + 1 <= distance){
-                res[ele.first + 1] = left[ele.first];
-            }
-        }
-
-        for(auto ele : right){
-            if(ele.first + 1 <= distance){
-                res[ele.first + 1] += right[ele.first];
-            }
-        }
-        return res;
     }
 public:
     int countPairs(TreeNode* root, int distance) {
+        unordered_map<TreeNode*, vector<TreeNode*>> adj;
+        unordered_set<TreeNode*> leafs;
+        buildGraph(root, adj, leafs);
         int res = 0;
-        countPairsHelper(root, distance, res);
-        return res;
+        for(auto node : leafs){
+            bfs(node, adj, leafs, res, distance);
+        }
+        return res/2;
     }
 };
