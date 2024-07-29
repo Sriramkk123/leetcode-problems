@@ -10,8 +10,8 @@ public:
         }
 
         for(int count = 2;count <= 3;count++){
-            for(int i = 0;i < n;i++){
-                for(int j = i + 1;j < n;j++){
+            for(int i = n-1;i >= 0;i--){
+                for(int j = i - 1;j >= 0;j--){
                     if(rating[i] < rating[j]){
                         dp[j][0][count] += dp[i][0][count-1];
                     }
