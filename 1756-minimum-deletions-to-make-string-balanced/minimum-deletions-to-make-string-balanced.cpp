@@ -1,23 +1,16 @@
 class Solution {
 public:
     int minimumDeletions(string s) {
-        int res = s.size();
-        int aCountRight = 0;
+        int minDeletions = 0;
+        int bCount = 0;
+        int n = s.size();
         for(auto ch : s){
-            if(ch == 'a'){
-                aCountRight++;
-            }
-        }
-        int bCountLeft = 0;
-        for(auto ch : s){
-            if(ch == 'a'){
-                aCountRight--;
-            }
-            res = min(res, aCountRight + bCountLeft);
             if(ch == 'b'){
-                bCountLeft++;
+                bCount++;
+            } else {
+                minDeletions = min(minDeletions + 1, bCount);
             }
         }
-        return res;
+        return minDeletions;
     }
 };
