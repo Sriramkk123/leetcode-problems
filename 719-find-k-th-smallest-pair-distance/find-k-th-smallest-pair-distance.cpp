@@ -20,11 +20,11 @@ public:
         sort(nums.begin(), nums.end());
         int low = 0;
         int high = nums[n-1] - nums[0];
-        while(low < high){
+        while(low <= high){
             int mid = (low + high)/2;
             int noOfPairs = countPairs(nums, mid);
             if(noOfPairs >= k){
-                high = mid;
+                high = mid - 1;
             } else {
                 low = mid + 1;
             }
