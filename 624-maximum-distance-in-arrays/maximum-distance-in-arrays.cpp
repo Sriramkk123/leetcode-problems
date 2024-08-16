@@ -53,10 +53,6 @@ private:
     }
 public:
     int maxDistance(vector<vector<int>>& arrays) {
-        for(auto arr : arrays){
-            sort(arr.begin(), arr.end());
-        }
-
         return max(miniMax(arrays), maxMini(arrays));
     }
 };
