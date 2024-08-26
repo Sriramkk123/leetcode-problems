@@ -19,21 +19,26 @@ public:
 */
 
 class Solution {
-private:
-    void postorderHelper(Node* root, vector<int>& res){
-        if(!root){
-            return;
-        }
-
-        for(auto node : root->children){
-            postorderHelper(node, res);
-        }
-        res.push_back(root->val);
-    }
 public:
     vector<int> postorder(Node* root) {
         vector<int> res;
-        postorderHelper(root, res);
+        if(!root){
+            return res;
+        }
+        stack<Node*> st;
+        st.push(root);
+        while(!st.empty()){
+            auto curr = st.top();
+            st.pop();
+
+            res.push_back(curr->val);
+            
+            int size = curr->children.size();
+            for(int i = 0;i < size;i++){
+                st.push(curr->children[i]);
+            }
+        }
+        reverse(res.begin(), res.end());
         return res;
     }
 };
