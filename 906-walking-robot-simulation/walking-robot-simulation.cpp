@@ -1,124 +1,72 @@
 class Solution {
 private:
     char getNextRight(char currentDirection){
-        if(currentDirection == 'N'){
-            return 'E';
+        switch (currentDirection) {
+            case 'N': return 'E';
+            case 'E': return 'S';
+            case 'S': return 'W';
+            case 'W': return 'N';
         }
-
-        if(currentDirection == 'E'){
-            return 'S';
-        }
-
-        if(currentDirection == 'S'){
-            return 'W';
-        }
-
-        return 'N';
+        return 'N'; // default case
     }
 
     char getNextLeft(char currentDirection){
-        if(currentDirection == 'N'){
-            return 'W';
+        switch (currentDirection) {
+            case 'N': return 'W';
+            case 'W': return 'S';
+            case 'S': return 'E';
+            case 'E': return 'N';
         }
-
-        if(currentDirection == 'W'){
-            return 'S';
-        }
-
-        if(currentDirection == 'S'){
-            return 'E';
-        }
-
-        return 'N';
+        return 'N'; // default case
     }
+    
+    bool isObstacle(set<pair<int, int>>& obstacleSet, int x, int y) {
+        return obstacleSet.find(make_pair(x, y)) != obstacleSet.end();
+    }
+
 public:
     int robotSim(vector<int>& commands, vector<vector<int>>& obstacles) {
         set<pair<int, int>> obstacleSet;
-        for(auto obst : obstacles){
+        for(const auto& obst : obstacles){
             obstacleSet.insert(make_pair(obst[0], obst[1]));
         }
+        
         char direction = 'N';
         pair<int,int> pos = {0,0};
         int res = 0;
-        for(auto command : commands){
-            if(command < 0){
-                if(command == -1){
-                    direction = getNextRight(direction);
-                }
 
-                if(command == -2){
+        for(int command : commands){
+            if(command < 0) {
+                if(command == -1) {
+                    direction = getNextRight(direction);
+                } else if(command == -2) {
                     direction = getNextLeft(direction);
                 }
                 continue;
             }
-            int currentX = pos.first;
-            int currentY = pos.second;
+
+            int dx = 0, dy = 0;
+            if(direction == 'N') dy = 1;
+            else if(direction == 'S') dy = -1;
+            else if(direction == 'E') dx = 1;
+            else if(direction == 'W') dx = -1;
+
             bool obstructed = false;
-            if(direction == 'N'){
-                for(int i = currentY+1;i <= currentY + command;i++){
-                    if(obstacleSet.find(pair<int,int>{currentX, i}) != obstacleSet.end()){
-                        pos = {currentX, i - 1};
-                        obstructed = true;
-                        break;
-                    } else {
-                        continue;
-                    }
+            for(int i = 1; i <= command; ++i) {
+                int newX = pos.first + i * dx;
+                int newY = pos.second + i * dy;
+                if(isObstacle(obstacleSet, newX, newY)) {
+                    pos = {newX - dx, newY - dy};
+                    obstructed = true;
+                    break;
                 }
-                if(!obstructed){
-                    pos = {currentX, currentY + command};
-                }
-                res = max(res, (pos.first * pos.first) + (pos.second * pos.second));
-                continue;
             }
-            if(direction == 'S'){
-                for(int i = currentY - 1;i >= currentY - command;i--){
-                    if(obstacleSet.find(pair<int,int>{currentX, i}) != obstacleSet.end()){
-                        pos = {currentX, i + 1};
-                        obstructed = true;
-                        break;
-                    } else {
-                        continue;
-                    }
-                }
-                if(!obstructed){
-                    pos = {currentX, currentY - command};
-                }
-                res = max(res, (pos.first * pos.first) + (pos.second * pos.second));
-                continue;
+            if(!obstructed) {
+                pos = {pos.first + command * dx, pos.second + command * dy};
             }
-            if(direction == 'E'){
-                for(int i = currentX + 1;i <= currentX + command;i++){
-                    if(obstacleSet.find(pair<int,int>{i, currentY}) != obstacleSet.end()){
-                        pos = {i - 1, currentY};
-                        obstructed = true;
-                        break;
-                    } else {
-                        continue;
-                    }
-                }
-                if(!obstructed){
-                    pos = {currentX + command, currentY};
-                }
-                res = max(res, (pos.first * pos.first) + (pos.second * pos.second));
-                continue;
-            }
-            if(direction == 'W'){
-                for(int i = currentX - 1;i >= currentX - command;i--){
-                    if(obstacleSet.find(pair<int,int>{i, currentY}) != obstacleSet.end()){
-                        pos = {i + 1, currentY};
-                        obstructed = true;
-                        break;
-                    } else {
-                        continue;
-                    }
-                }
-                if(!obstructed){
-                    pos = {currentX - command, currentY};
-                }
-                res = max(res, (pos.first * pos.first) + (pos.second * pos.second));
-                continue;
-            }
+            res = max(res, pos.first * pos.first + pos.second * pos.second);
         }
+
         return res;
     }
 };
